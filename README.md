@@ -1,16 +1,43 @@
-# message_forwarder_flutter
+# Message Forwarder
 
-A new Flutter project.
+A minimal open-source message forwarding app built in TypeScript.
+
+## Features
+- Forward incoming SMS to a configured number (via Twilio)
+- Forward incoming emails to a configured address (via SMTP)
+- Easy configuration via `.env`
+- Simple web UI
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Clone the repository:
+   ```bash
+   git clone <repo-url>
+   cd message-forwarder
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Copy `.env.example` to `.env` and fill in your credentials.
+4. Build the project:
+   ```bash
+   npm run build
+   ```
+5. Start the server:
+   ```bash
+   npm start
+   ```
 
-A few resources to get you started if this is your first Flutter project:
+Or in development mode:
+```bash
+npm run dev
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Usage
+- Configure your Twilio webhook for SMS to `POST /api/sms`
+- Configure your email webhook to `POST /api/email`
+- Open `http://localhost:3000` for the simple UI
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## License
+MIT
