@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Message Forwarder</string>
+    <string name="permission_required">Permissions Required</string>
+    <string name="notification_access_required">Notification Access Required</string>
+    <string name="grant_permissions">Grant Permissions</string>
+    <string name="setup_notification_access">Setup Notification Access</string>
+    <string name="all_permissions_granted">All permissions granted ✓</string>
+    <string name="create_new_rule">Create New Rule</string>
+    <string name="edit_rule">Edit Rule</string>
+    <string name="delete_rule">Delete Rule</string>
+    <string name="rule_saved">Rule saved successfully</string>
+    <string name="rule_deleted">Rule deleted</string>
+    <string name="no_rules_message">No forwarding rules yet.\nTap + to create your first rule.</string>
+    <string name="recent_messages">Recent Messages</string>
+    <string name="forwarded_messages">Forwarded Messages</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="github_repo">GitHub Repository</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="open_source_licenses">Open Source Licenses</string>
+</resources>
