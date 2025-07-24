@@ -1,423 +1,720 @@
-// Modern Message Forwarder Frontend - Message Forge
+// Enhanced Message Forwarder Frontend - Full Functionality
 document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize the app
   await initializeApp();
-  
-  // Set up event listeners
   setupEventListeners();
-  
-  // Load services status
   await loadServices();
-  
-  // Check authentication status
   await checkAuthStatus();
-  
-  // Load existing routes
   await loadRoutes();
+  handleOAuthCallback(); // Handle OAuth callbacks
 });
 
 // Check if we're in demo mode (GitHub Pages)
 const isDemoMode = !window.location.hostname.includes('localhost') && 
                    !window.location.hostname.includes('127.0.0.1');
 
+// Global state
+let currentUser = null;
+let services = [];
+let routes = [];
+
+function handleOAuthCallback() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const connected = urlParams.get('connected');
+  const error = urlParams.get('error');
+  
+  if (connected) {
+    showNotification(`Successfully connected to ${connected}!`, 'success');
+    // Clear URL parameters
+    window.history.replaceState({}, document.title, window.location.pathname);
+    // Reload services and auth status
+    setTimeout(() => {
+      loadServices();
+      checkAuthStatus();
+    }, 1000);
+  } else if (error) {
+    showNotification(`Connection failed: ${error}`, 'error');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+}
+
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `fixed top-4 right-4 z-50 glass p-4 rounded-lg max-w-sm ${
+    type === 'success' ? 'border-green-400 text-green-300' :
+    type === 'error' ? 'border-red-400 text-red-300' :
+    'border-orange-400 text-orange-300'
+  }`;
+  notification.innerHTML = `
+    <div class="flex items-center">
+      <span class="mr-2">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+      <span>${message}</span>
+      <button class="ml-4 text-gray-400 hover:text-white" onclick="this.parentElement.parentElement.remove()">×</button>
+    </div>
+  `;
+  document.body.appendChild(notification);
+  
+  // Auto remove after 5 seconds
+  setTimeout(() => {
+    if (notification.parentElement) {
+      notification.remove();
+    }
+  }, 5000);
+}
+
 async function initializeApp() {
-  console.log('Message Forge initialized');
+  console.log('Message Forge initialized with enhanced functionality');
   
   if (isDemoMode) {
-    // Show demo banner with orange theme
     const banner = document.createElement('div');
     banner.className = 'glass rounded-lg p-4 mb-6 border border-orange-400';
     banner.innerHTML = `
-      <div class="flex items-center space-x-3">
-        <span class="text-orange-400">⚠️</span>
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🚀</span>
         <div>
-          <h3 class="font-semibold text-orange-400">Demo Mode</h3>
-          <p class="text-sm text-gray-300">This is a frontend demo. APIs are simulated.</p>
+          <h3 class="text-orange-400 font-bold">Demo Mode</h3>
+          <p class="text-sm text-gray-300">This is a demonstration. For full functionality, <a href="https://github.com/vats98754/message-forwarder" class="text-orange-400 hover:underline">clone and run locally</a>.</p>
         </div>
       </div>
     `;
-    document.querySelector('.container').insertBefore(banner, document.querySelector('header').nextSibling);
+    document.querySelector('.container').insertBefore(banner, document.querySelector('header'));
+  }
+}
+
+function setupEventListeners() {
+  // Auth button
+  document.getElementById('auth-btn')?.addEventListener('click', handleAuth);
+  
+  // Logout button  
+  document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
+
+  // Global click handler for dynamic elements
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('service-connect')) {
+      const serviceName = e.target.dataset.service;
+      showServiceConfigModal(serviceName);
+    }
+    
+    if (e.target.classList.contains('service-test')) {
+      const serviceName = e.target.dataset.service;
+      testService(serviceName);
+    }
+    
+    if (e.target.id === 'create-route-btn') {
+      showCreateRouteModal();
+    }
+    
+    if (e.target.classList.contains('delete-route')) {
+      const routeId = e.target.dataset.routeId;
+      deleteRoute(routeId);
+    }
+    
+    if (e.target.id === 'modal-close' || e.target.classList.contains('modal-backdrop')) {
+      closeModal();
+    }
+  });
+
+  // Test message form
+  document.getElementById('test-form')?.addEventListener('submit', handleTestMessage);
+}
+
+async function handleAuth() {
+  if (isDemoMode) {
+    alert('Authentication is not available in demo mode. Clone the repo and run locally!');
+    return;
+  }
+  window.location.href = '/auth/google';
+}
+
+async function handleLogout() {
+  if (isDemoMode) return;
+  window.location.href = '/logout';
+}
+
+async function checkAuthStatus() {
+  try {
+    const response = await fetch('/api/user');
+    const data = await response.json();
+    
+    currentUser = data.authenticated ? data.user : null;
+    
+    if (data.connections) {
+      // Update connected services from auth manager
+      data.connections.forEach(conn => {
+        const service = services.find(s => s.name.toLowerCase() === conn.type.toLowerCase());
+        if (service) {
+          service.connected = conn.connected;
+        }
+      });
+      updateServicesUI();
+    }
+    
+    updateAuthUI(data);
+  } catch (error) {
+    console.error('Failed to check auth status:', error);
+    if (!isDemoMode) {
+      updateAuthUI({ authenticated: false });
+    }
+  }
+}
+
+function updateAuthUI(data) {
+  const authBtn = document.getElementById('auth-btn');
+  const userInfo = document.getElementById('user-info');
+  const userName = document.getElementById('user-name');
+  
+  if (data.authenticated && data.user) {
+    authBtn.classList.add('hidden');
+    userInfo.classList.remove('hidden');
+    userName.textContent = data.user.name || data.user.email || 'User';
+  } else {
+    authBtn.classList.remove('hidden');
+    userInfo.classList.add('hidden');
   }
 }
 
 async function loadServices() {
   try {
-    let services;
-    
     if (isDemoMode) {
-      // Simulate services for demo
       services = [
-        { name: 'Email', enabled: true },
-        { name: 'SMS', enabled: false },
-        { name: 'Discord', enabled: true },
-        { name: 'Telegram', enabled: true },
-        { name: 'Slack', enabled: false },
-        { name: 'Textbelt', enabled: true }
+        { name: 'Email', enabled: false, connected: false },
+        { name: 'SMS', enabled: false, connected: false },
+        { name: 'Discord', enabled: false, connected: false },
+        { name: 'Telegram', enabled: false, connected: false },
+        { name: 'Slack', enabled: false, connected: false },
+        { name: 'Textbelt', enabled: false, connected: false }
       ];
     } else {
       const response = await fetch('/api/services');
       services = await response.json();
     }
     
-    const servicesGrid = document.getElementById('services-grid');
-    const testServiceSelect = document.getElementById('test-service');
-    const sourceServiceSelect = document.getElementById('source-service');
-    const targetServiceSelect = document.getElementById('target-service');
-    
-    // Clear existing content
-    servicesGrid.innerHTML = '';
-    testServiceSelect.innerHTML = '<option value="">Select a service...</option>';
-    sourceServiceSelect.innerHTML = '<option value="">Select source service...</option>';
-    targetServiceSelect.innerHTML = '<option value="">Select target service...</option>';
-    
-    services.forEach(service => {
-      // Create service card with orange theme
-      const serviceCard = document.createElement('div');
-      serviceCard.className = `glass rounded-lg p-4 text-center transition-all hover:scale-105 ${
-        service.enabled ? 'border-orange-400' : 'border-gray-600'
-      }`;
-      serviceCard.style.border = service.enabled ? '1px solid rgba(251, 146, 60, 0.5)' : '1px solid rgba(156, 163, 175, 0.5)';
-      
-      serviceCard.innerHTML = `
-        <div class="flex flex-col items-center space-y-2">
-          <div class="w-8 h-8 rounded-full ${
-            service.enabled ? 'bg-orange-500' : 'bg-gray-500'
-          } flex items-center justify-center">
-            <span class="text-black font-bold text-sm">${service.name[0]}</span>
-          </div>
-          <span class="text-xs font-medium">${service.name}</span>
-          <div class="w-2 h-2 rounded-full ${
-            service.enabled ? 'bg-orange-500 animate-pulse' : 'bg-gray-500'
-          }"></div>
-        </div>
-      `;
-      servicesGrid.appendChild(serviceCard);
-      
-      // Add to all select dropdowns if enabled
-      if (service.enabled) {
-        const testOption = document.createElement('option');
-        testOption.value = service.name;
-        testOption.textContent = service.name;
-        testServiceSelect.appendChild(testOption);
-        
-        const sourceOption = document.createElement('option');
-        sourceOption.value = service.name;
-        sourceOption.textContent = service.name;
-        sourceServiceSelect.appendChild(sourceOption);
-        
-        const targetOption = document.createElement('option');
-        targetOption.value = service.name;
-        targetOption.textContent = service.name;
-        targetServiceSelect.appendChild(targetOption);
-      }
-    });
+    updateServicesUI();
   } catch (error) {
     console.error('Failed to load services:', error);
-    showStatus('test-status', 'Failed to load services', 'error');
   }
 }
 
-async function checkAuthStatus() {
-  try {
-    let data;
+function updateServicesUI() {
+  const servicesGrid = document.getElementById('services-grid');
+  if (!servicesGrid) return;
+  
+  servicesGrid.innerHTML = '';
+  
+  services.forEach(service => {
+    const serviceCard = document.createElement('div');
+    serviceCard.className = `service-card glass rounded-lg p-4 border ${
+      service.connected ? 'border-orange-400' : 'border-gray-600'
+    }`;
     
-    if (isDemoMode) {
-      // Simulate authentication for demo
-      data = { authenticated: false };
-    } else {
-      const response = await fetch('/api/user');
-      data = await response.json();
-    }
+    const statusIcon = service.connected ? '✅' : service.enabled ? '⚠️' : '❌';
+    const statusText = service.connected ? 'Connected' : service.enabled ? 'Configured' : 'Not Connected';
+    const statusColor = service.connected ? 'text-green-400' : service.enabled ? 'text-yellow-400' : 'text-gray-400';
     
-    const authBtn = document.getElementById('auth-btn');
-    const userInfo = document.getElementById('user-info');
-    const userName = document.getElementById('user-name');
+    serviceCard.innerHTML = `
+      <div class="text-center">
+        <div class="text-3xl mb-2">${getServiceIcon(service.name)}</div>
+        <h3 class="font-semibold text-white mb-1">${service.name}</h3>
+        <div class="flex items-center justify-center gap-1 mb-3">
+          <span>${statusIcon}</span>
+          <span class="text-xs ${statusColor}">${statusText}</span>
+        </div>
+        <div class="space-y-2">
+          <button class="service-connect w-full px-3 py-1 text-xs bg-orange-500 hover:bg-orange-600 rounded transition" 
+                  data-service="${service.name}">
+            ${service.connected ? 'Reconfigure' : 'Connect'}
+          </button>
+          ${service.enabled ? `
+            <button class="service-test w-full px-3 py-1 text-xs bg-blue-500 hover:bg-blue-600 rounded transition" 
+                    data-service="${service.name}">
+              Test
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
     
-    if (data.authenticated) {
-      authBtn.style.display = 'none';
-      userInfo.classList.remove('hidden');
-      userName.textContent = data.user?.profile?.displayName || 'User';
-    } else {
-      authBtn.style.display = 'block';
-      userInfo.classList.add('hidden');
-    }
-  } catch (error) {
-    console.error('Failed to check auth status:', error);
-  }
+    servicesGrid.appendChild(serviceCard);
+  });
+  
+  updateServiceSelects();
 }
 
-function setupEventListeners() {
-  // Auth button
-  document.getElementById('auth-btn').addEventListener('click', () => {
-    if (isDemoMode) {
-      alert('Authentication is not available in demo mode. Clone the repo and run locally!');
-    } else {
-      window.location.href = '/auth/google';
-    }
-  });
+function getServiceIcon(serviceName) {
+  const icons = {
+    'Email': '📧',
+    'SMS': '📱',
+    'Discord': '🎮',
+    'Telegram': '✈️',
+    'Slack': '💬',
+    'Textbelt': '📲'
+  };
+  return icons[serviceName] || '🔗';
+}
+
+function updateServiceSelects() {
+  const selects = [
+    document.getElementById('test-service'),
+    document.getElementById('source-service'), 
+    document.getElementById('target-service')
+  ];
   
-  // Logout button
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    if (!isDemoMode) {
-      window.location.href = '/logout';
-    }
-  });
-  
-  // Service connection buttons
-  const connectButtons = document.querySelectorAll('.connect-btn');
-  connectButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const service = e.target.dataset.service;
-      if (isDemoMode) {
-        alert(`Demo: Would connect to ${service}. Run locally for real OAuth!`);
-      } else {
-        window.location.href = `/auth/${service.toLowerCase()}`;
-      }
+  selects.forEach(select => {
+    if (!select) return;
+    const currentValue = select.value;
+    select.innerHTML = '<option value="">Select a service...</option>';
+    
+    services.filter(s => s.connected).forEach(service => {
+      const option = document.createElement('option');
+      option.value = service.name;
+      option.textContent = service.name;
+      if (option.value === currentValue) option.selected = true;
+      select.appendChild(option);
     });
   });
-  
-  // Route form
-  document.getElementById('route-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    const routeData = {
-      source: formData.get('source-service'),
-      target: formData.get('target-service'),
-      filter: formData.get('filter') || null
-    };
-    
-    try {
-      let success;
-      
-      if (isDemoMode) {
-        // Simulate route creation
-        success = true;
-        await new Promise(resolve => setTimeout(resolve, 500));
-      } else {
-        const response = await fetch('/api/routes', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(routeData)
-        });
-        success = response.ok;
-      }
-      
-      if (success) {
-        showStatus('route-status', 'Route created successfully!', 'success');
-        e.target.reset();
-        await loadRoutes();
-      } else {
-        showStatus('route-status', 'Failed to create route', 'error');
-      }
-    } catch (error) {
-      console.error('Route creation failed:', error);
-      showStatus('route-status', 'Error creating route', 'error');
-    }
-  });
-  
-  // Test form
-  document.getElementById('test-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await handleTestSubmit();
-  });
-  
-  // Broadcast form
-  document.getElementById('broadcast-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await handleBroadcastSubmit();
-  });
 }
 
-async function handleTestSubmit() {
-  const from = document.getElementById('test-from').value;
-  const message = document.getElementById('test-message').value;
-  const service = document.getElementById('test-service').value;
-  
-  if (!from || !message || !service) {
-    showStatus('test-status', 'Please fill in all fields', 'error');
+async function showServiceConfigModal(serviceName) {
+  if (isDemoMode) {
+    alert(`Demo: Would connect to ${serviceName}. Run locally for real OAuth!`);
     return;
   }
+
+  // OAuth services - redirect to OAuth flow
+  const oauthServices = ['Discord', 'Google', 'Slack'];
+  if (oauthServices.includes(serviceName)) {
+    const confirmed = confirm(`Connect to ${serviceName} using OAuth?`);
+    if (confirmed) {
+      window.location.href = `/auth/${serviceName.toLowerCase()}`;
+    }
+    return;
+  }
+
+  // Manual configuration services
+  try {
+    const response = await fetch(`/api/services/${serviceName}/config`);
+    const configReq = await response.json();
+    showModal(`Configure ${serviceName}`, createServiceConfigForm(serviceName, configReq));
+  } catch (error) {
+    console.error('Failed to get service config:', error);
+    showNotification('Failed to load service configuration', 'error');
+  }
+}
+
+function getDemoServiceConfig(serviceName) {
+  const configs = {
+    'Email': {
+      fields: [
+        { name: 'host', type: 'text', label: 'SMTP Host', required: true, placeholder: 'smtp.gmail.com' },
+        { name: 'port', type: 'number', label: 'SMTP Port', required: true, placeholder: '587' },
+        { name: 'user', type: 'email', label: 'Email Address', required: true },
+        { name: 'pass', type: 'password', label: 'Password', required: true },
+        { name: 'to', type: 'email', label: 'Forward To Email', required: true }
+      ],
+      instructions: 'Enter your SMTP credentials to enable email forwarding.'
+    },
+    'SMS': {
+      fields: [
+        { name: 'accountSid', type: 'text', label: 'Account SID', required: true },
+        { name: 'authToken', type: 'password', label: 'Auth Token', required: true },
+        { name: 'fromNumber', type: 'tel', label: 'From Number', required: true },
+        { name: 'to', type: 'tel', label: 'Forward To Number', required: true }
+      ],
+      instructions: 'Enter your Twilio credentials for SMS forwarding.'
+    },
+    'Discord': {
+      fields: [
+        { name: 'botToken', type: 'password', label: 'Bot Token', required: true },
+        { name: 'channelId', type: 'text', label: 'Channel ID', required: true }
+      ],
+      instructions: 'Create a Discord bot and get the token and channel ID.'
+    },
+    'Telegram': {
+      fields: [
+        { name: 'botToken', type: 'password', label: 'Bot Token', required: true },
+        { name: 'chatId', type: 'text', label: 'Chat ID', required: true }
+      ],
+      instructions: 'Create a Telegram bot with @BotFather and get the chat ID.'
+    },
+    'Slack': {
+      fields: [
+        { name: 'botToken', type: 'password', label: 'Bot Token', required: true },
+        { name: 'channel', type: 'text', label: 'Channel', required: true }
+      ],
+      instructions: 'Create a Slack app and get the bot token.'
+    },
+    'Textbelt': {
+      fields: [
+        { name: 'apiKey', type: 'password', label: 'API Key', required: true },
+        { name: 'to', type: 'tel', label: 'Forward To Number', required: true }
+      ],
+      instructions: 'Get an API key from textbelt.com.'
+    }
+  };
   
-  showStatus('test-status', 'Sending...', 'info');
+  return configs[serviceName] || { fields: [], instructions: 'Configuration not available in demo mode.' };
+}
+
+function createServiceConfigForm(serviceName, config) {
+  return `
+    <form id="service-config-form" class="space-y-4">
+      <div class="text-sm text-gray-300 bg-gray-800 p-3 rounded">
+        ${config.instructions || 'Configure this service by filling out the form below.'}
+      </div>
+      
+      ${config.fields.map(field => `
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1">
+            ${field.label} ${field.required ? '*' : ''}
+          </label>
+          <input 
+            type="${field.type}" 
+            name="${field.name}" 
+            placeholder="${field.placeholder || ''}"
+            ${field.required ? 'required' : ''}
+            class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:border-orange-400 focus:outline-none text-white"
+          />
+        </div>
+      `).join('')}
+      
+      <div class="flex gap-3 pt-4">
+        <button type="submit" class="flex-1 bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded font-medium transition">
+          ${isDemoMode ? 'Demo Connect' : 'Connect & Test'}
+        </button>
+        <button type="button" id="modal-close" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded transition">
+          Cancel
+        </button>
+      </div>
+    </form>
+  `;
+}
+
+function showModal(title, content) {
+  const modal = document.createElement('div');
+  modal.id = 'modal';
+  modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal-backdrop';
   
-  if (isDemoMode) {
-    // Simulate API call for demo
-    setTimeout(() => {
-      showStatus('test-status', `✅ Demo: Message would be sent to ${service}!`, 'success');
-      document.getElementById('test-form').reset();
-    }, 1000);
+  modal.innerHTML = `
+    <div class="glass rounded-lg p-6 max-w-md w-full mx-4 border border-orange-400" onclick="event.stopPropagation()">
+      <h2 class="text-xl font-bold text-orange-400 mb-4">${title}</h2>
+      ${content}
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Handle form submission
+  const form = modal.querySelector('#service-config-form');
+  if (form) {
+    form.addEventListener('submit', handleServiceConfig);
+  }
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.remove();
+  }
+}
+
+async function handleServiceConfig(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const formData = new FormData(form);
+  const serviceName = document.querySelector('[data-service]')?.dataset.service || 
+                     document.querySelector('.service-connect')?.dataset.service;
+  
+  const config = {};
+  for (const [key, value] of formData.entries()) {
+    config[key] = value;
+  }
+  
+  try {
+    if (isDemoMode) {
+      // Simulate connection
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const service = services.find(s => s.name === serviceName);
+      if (service) {
+        service.enabled = true;
+        service.connected = true;
+      }
+      updateServicesUI();
+      closeModal();
+      alert(`Demo: ${serviceName} connected successfully!`);
+    } else {
+      const response = await fetch(`/api/services/${serviceName}/connect`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config)
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        await loadServices(); // Reload services to get updated status
+        closeModal();
+        alert(`${serviceName} connected successfully!`);
+      } else {
+        alert(`Failed to connect ${serviceName}: ${result.error}`);
+      }
+    }
+  } catch (error) {
+    console.error('Service connection error:', error);
+    alert(`Failed to connect ${serviceName}: ${error.message}`);
+  }
+}
+
+async function testService(serviceName) {
+  try {
+    if (isDemoMode) {
+      alert(`Demo: Testing ${serviceName} - Connection OK!`);
+      return;
+    }
+    
+    const response = await fetch(`/api/services/${serviceName}/test`, {
+      method: 'POST'
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert(`${serviceName} test successful!`);
+    } else {
+      alert(`${serviceName} test failed: ${result.error}`);
+    }
+  } catch (error) {
+    console.error('Service test error:', error);
+    alert(`Failed to test ${serviceName}: ${error.message}`);
+  }
+}
+
+async function handleTestMessage(e) {
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
+  const service = formData.get('test-service');
+  const message = formData.get('test-message');
+  
+  if (!service || !message) {
+    alert('Please select a service and enter a message');
     return;
   }
   
   try {
+    if (isDemoMode) {
+      alert(`Demo: Would send "${message}" to ${service}`);
+      return;
+    }
+    
     const response = await fetch(`/api/forward/${service}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, from })
+      body: JSON.stringify({
+        message: message,
+        from: 'Test Interface'
+      })
     });
     
     const result = await response.json();
     
-    if (response.ok) {
-      showStatus('test-status', `✅ Message sent to ${service}!`, 'success');
-      // Clear form
-      document.getElementById('test-form').reset();
+    if (result.success) {
+      alert(`Test message sent to ${service}!`);
+      e.target.reset();
     } else {
-      showStatus('test-status', `❌ ${result.error || 'Failed to send'}`, 'error');
+      alert(`Failed to send to ${service}: ${result.error}`);
     }
   } catch (error) {
-    showStatus('test-status', '❌ Network error', 'error');
+    console.error('Test message error:', error);
+    alert(`Failed to send test message: ${error.message}`);
   }
 }
 
-async function handleBroadcastSubmit() {
-  const from = document.getElementById('broadcast-from').value;
-  const message = document.getElementById('broadcast-message').value;
+function showCreateRouteModal() {
+  const connectedServices = services.filter(s => s.connected);
   
-  if (!from || !message) {
-    showStatus('broadcast-status', 'Please fill in all fields', 'error');
+  if (connectedServices.length < 2) {
+    alert('You need at least 2 connected services to create a route');
     return;
   }
   
-  showStatus('broadcast-status', 'Broadcasting...', 'info');
+  const serviceOptions = connectedServices.map(s => 
+    `<option value="${s.name}">${s.name}</option>`
+  ).join('');
   
-  if (isDemoMode) {
-    // Simulate API call for demo
-    setTimeout(() => {
-      showStatus('broadcast-status', '✅ Demo: Broadcast would be sent to all services!', 'success');
-      document.getElementById('broadcast-form').reset();
-    }, 1500);
+  const content = `
+    <form id="route-create-form" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Source Service *</label>
+        <select name="source" required class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:border-orange-400 focus:outline-none text-white">
+          <option value="">Select source...</option>
+          ${serviceOptions}
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Target Service *</label>
+        <select name="target" required class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:border-orange-400 focus:outline-none text-white">
+          <option value="">Select target...</option>
+          ${serviceOptions}
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Filter (optional)</label>
+        <input 
+          type="text" 
+          name="filter" 
+          placeholder="Only forward messages containing this text"
+          class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:border-orange-400 focus:outline-none text-white"
+        />
+      </div>
+      
+      <div class="flex gap-3 pt-4">
+        <button type="submit" class="flex-1 bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded font-medium transition">
+          Create Route
+        </button>
+        <button type="button" id="modal-close" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded transition">
+          Cancel
+        </button>
+      </div>
+    </form>
+  `;
+  
+  showModal('Create New Route', content);
+  
+  // Handle form submission
+  const form = document.querySelector('#route-create-form');
+  if (form) {
+    form.addEventListener('submit', handleCreateRoute);
+  }
+}
+
+async function handleCreateRoute(e) {
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
+  const routeData = {
+    from: formData.get('source'),
+    to: formData.get('target'),
+    enabled: true
+  };
+  
+  if (routeData.from === routeData.to) {
+    showNotification('Source and target services cannot be the same', 'error');
     return;
   }
   
   try {
-    const response = await fetch('/api/broadcast', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, from })
-    });
-    
-    const result = await response.json();
-    
-    if (response.ok) {
-      showStatus('broadcast-status', '✅ Broadcast sent to all services!', 'success');
-      // Clear form
-      document.getElementById('broadcast-form').reset();
+    if (isDemoMode) {
+      const newRoute = {
+        id: Date.now().toString(),
+        from: routeData.from,
+        to: routeData.to,
+        enabled: true,
+        createdAt: new Date()
+      };
+      routes.push(newRoute);
+      updateRoutesUI();
+      closeModal();
+      showNotification('Demo: Route created successfully!', 'success');
     } else {
-      showStatus('broadcast-status', `❌ ${result.error || 'Broadcast failed'}`, 'error');
+      const response = await fetch('/api/routes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(routeData)
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        await loadRoutes();
+        closeModal();
+        showNotification('Route created successfully!', 'success');
+      } else {
+        showNotification(`Failed to create route: ${result.error}`, 'error');
+      }
     }
   } catch (error) {
-    showStatus('broadcast-status', '❌ Network error', 'error');
+    console.error('Route creation error:', error);
+    showNotification(`Failed to create route: ${error.message}`, 'error');
   }
 }
 
 async function loadRoutes() {
   try {
-    let routes;
-    
     if (isDemoMode) {
-      // Simulate routes for demo
-      routes = [
-        { id: '1', source: 'Email', target: 'Discord', filter: 'urgent' },
-        { id: '2', source: 'Discord', target: 'Telegram', filter: null },
-        { id: '3', source: 'Email', target: 'SMS', filter: 'emergency' }
-      ];
+      routes = routes || [];
     } else {
       const response = await fetch('/api/routes');
-      routes = await response.json();
+      const data = await response.json();
+      routes = data.routes || [];
     }
     
-    const routesList = document.getElementById('routes-list');
-    
-    // Clear existing content
-    routesList.innerHTML = '';
-    
-    if (routes.length === 0) {
-      routesList.innerHTML = `
-        <div class="text-center py-8 text-gray-400">
-          <span class="text-4xl">🔗</span>
-          <p class="mt-2">No routes configured yet</p>
-          <p class="text-sm">Create your first route above!</p>
-        </div>
-      `;
-      return;
-    }
-    
-    routes.forEach(route => {
-      const routeCard = document.createElement('div');
-      routeCard.className = 'glass rounded-lg p-4 flex items-center justify-between';
-      
-      routeCard.innerHTML = `
-        <div class="flex items-center space-x-4">
-          <div class="text-orange-400 font-semibold">${route.source}</div>
-          <div class="text-gray-400">→</div>
-          <div class="text-orange-400 font-semibold">${route.target}</div>
-          ${route.filter ? `<div class="text-xs bg-orange-500 bg-opacity-20 text-orange-300 px-2 py-1 rounded">filter: ${route.filter}</div>` : ''}
-        </div>
-        <button onclick="deleteRoute('${route.id}')" class="text-red-400 hover:text-red-300 text-sm">✕</button>
-      `;
-      
-      routesList.appendChild(routeCard);
-    });
+    updateRoutesUI();
   } catch (error) {
     console.error('Failed to load routes:', error);
-    showStatus('route-status', 'Failed to load routes', 'error');
   }
 }
 
+function updateRoutesUI() {
+  const routesList = document.getElementById('routes-list');
+  if (!routesList) return;
+  
+  if (routes.length === 0) {
+    routesList.innerHTML = `
+      <div class="text-center text-gray-400 py-8">
+        <p>No routes configured yet</p>
+        <button id="create-route-btn" class="mt-4 bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded transition">
+          Create First Route
+        </button>
+      </div>
+    `;
+    return;
+  }
+  
+  routesList.innerHTML = routes.map(route => `
+    <div class="glass rounded-lg p-4 border border-gray-600">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <span class="text-blue-400 font-medium">${route.from}</span>
+          <span class="text-gray-400">→</span>
+          <span class="text-green-400 font-medium">${route.to}</span>
+          <span class="text-xs ${route.enabled ? 'bg-green-500' : 'bg-gray-500'} px-2 py-1 rounded">
+            ${route.enabled ? 'Active' : 'Disabled'}
+          </span>
+        </div>
+        <button class="delete-route text-red-400 hover:text-red-300 transition" data-route-id="${route.id}">
+          🗑️
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
 async function deleteRoute(routeId) {
+  if (!confirm('Are you sure you want to delete this route?')) return;
+  
   try {
-    let success;
-    
     if (isDemoMode) {
-      success = true;
-      await new Promise(resolve => setTimeout(resolve, 300));
+      routes = routes.filter(r => r.id !== routeId);
+      updateRoutesUI();
+      showNotification('Demo: Route deleted successfully!', 'success');
     } else {
       const response = await fetch(`/api/routes/${routeId}`, {
         method: 'DELETE'
       });
-      success = response.ok;
-    }
-    
-    if (success) {
-      showStatus('route-status', 'Route deleted successfully!', 'success');
-      await loadRoutes();
-    } else {
-      showStatus('route-status', 'Failed to delete route', 'error');
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        await loadRoutes();
+        showNotification('Route deleted successfully!', 'success');
+      } else {
+        showNotification(`Failed to delete route: ${result.error}`, 'error');
+      }
     }
   } catch (error) {
-    console.error('Route deletion failed:', error);
-    showStatus('route-status', 'Error deleting route', 'error');
-  }
-}
-
-function showStatus(elementId, message, type) {
-  const element = document.getElementById(elementId);
-  element.textContent = message;
-  
-  // Remove existing classes
-  element.classList.remove('text-green-400', 'text-red-400', 'text-orange-400', 'text-gray-400');
-  
-  // Add appropriate class with orange theme
-  switch (type) {
-    case 'success':
-      element.classList.add('text-green-400');
-      break;
-    case 'error':
-      element.classList.add('text-red-400');
-      break;
-    case 'info':
-      element.classList.add('text-orange-400');
-      break;
-    default:
-      element.classList.add('text-gray-400');
-  }
-  
-  // Auto-clear after 5 seconds for non-error messages
-  if (type !== 'error') {
-    setTimeout(() => {
-      element.textContent = '';
-    }, 5000);
+    console.error('Route deletion error:', error);
+    showNotification(`Failed to delete route: ${error.message}`, 'error');
   }
 }
