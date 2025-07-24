@@ -3,31 +3,277 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Message Forwarder</title>
+  <title>Message Forwarder | Universal Message Bridge</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            orange: {
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+            },
+            gray: {
+              800: '#1f2937',
+              900: '#111827',
+            }
+          }
+        }
+      }
+    }
+  </script>
   <script defer src="app.js"></script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #000000 100%);
+    }
+    .glass {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(251, 146, 60, 0.3);
+    }
+    .orange-glow {
+      box-shadow: 0 0 20px rgba(251, 146, 60, 0.4);
+    }
+    .orange-border {
+      border: 2px solid #f97316;
+    }
+    @keyframes pulse-orange {
+      0%, 100% { box-shadow: 0 0 20px rgba(251, 146, 60, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(251, 146, 60, 0.7); }
+    }
+    .pulse-orange { animation: pulse-orange 2s infinite; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .float { animation: float 6s ease-in-out infinite; }
+    .service-card:hover {
+      transform: scale(1.05);
+      transition: all 0.3s ease;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center py-10">
-  <div class="space-y-8">
-    <div class="bg-white p-6 rounded shadow-md w-96 mx-auto">
-      <h2 class="text-xl font-bold mb-4">Test SMS Forward</h2>
-      <form id="sms-form" class="space-y-2">
-        <input type="text" id="sms-from" placeholder="From number" class="w-full px-3 py-2 border rounded" />
-        <textarea id="sms-body" placeholder="Message body" class="w-full px-3 py-2 border rounded"></textarea>
-        <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Send SMS</button>
-      </form>
-      <p id="sms-status" class="text-sm mt-2 text-center"></p>
-    </div>
-    <div class="bg-white p-6 rounded shadow-md w-96 mx-auto">
-      <h2 class="text-xl font-bold mb-4">Test Email Forward</h2>
-      <form id="email-form" class="space-y-2">
-        <input type="email" id="email-from" placeholder="From address" class="w-full px-3 py-2 border rounded" />
-        <input type="text" id="email-subject" placeholder="Subject" class="w-full px-3 py-2 border rounded" />
-        <textarea id="email-text" placeholder="Email body" class="w-full px-3 py-2 border rounded"></textarea>
-        <button type="submit" class="w-full bg-green-500 text-white py-2 rounded">Send Email</button>
-      </form>
-      <p id="email-status" class="text-sm mt-2 text-center"></p>
-    </div>
+<body class="gradient-bg min-h-screen text-white">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="text-center mb-12">
+      <h1 class="text-6xl font-bold mb-4 float">
+        <span class="text-orange-500">Message</span> <span class="text-white">Forge</span>
+      </h1>
+      <p class="text-xl text-gray-300">Connect any service to any service - Universal message routing</p>
+      <div class="mt-8" id="auth-section">
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
+          <button id="auth-btn" class="glass px-8 py-3 rounded-lg hover:bg-orange-500 hover:bg-opacity-20 transition orange-glow">
+            🔐 Sign in with Google
+          </button>
+          <button id="service-connect-btn" class="glass px-8 py-3 rounded-lg hover:bg-orange-500 hover:bg-opacity-20 transition">
+            🔗 Connect Services
+          </button>
+        </div>
+        <div id="user-info" class="hidden mt-6 glass rounded-lg p-4 max-w-md mx-auto">
+          <p class="text-orange-400">Welcome, <span id="user-name"></span>!</p>
+          <button id="logout-btn" class="text-sm text-gray-400 hover:text-orange-400 mt-2">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Services Status -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-bold mb-8 text-center">
+        <span class="text-orange-500">Connected</span> Services
+      </h2>
+      <div id="services-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <!-- Services will be populated by JS -->
+      </div>
+    </section>
+
+    <!-- Service Mapping Interface -->
+    <section class="mb-12">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-center">
+          <span class="text-orange-500">Create</span> Message Routes
+        </h2>
+        
+        <!-- Route Builder -->
+        <div class="glass rounded-xl p-8 mb-8 orange-glow">
+          <h3 class="text-xl font-semibold mb-6 text-orange-400">🔗 Build Message Route</h3>
+          <div class="grid md:grid-cols-5 gap-4 items-center">
+            <div>
+              <label class="block text-sm font-medium mb-2 text-orange-300">From Service</label>
+              <select id="source-service" class="w-full px-4 py-3 bg-black bg-opacity-60 rounded-lg border border-orange-500 focus:border-orange-400 focus:outline-none text-white">
+                <option value="">Select source...</option>
+              </select>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl text-orange-500">→</div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2 text-orange-300">To Service</label>
+              <select id="target-service" class="w-full px-4 py-3 bg-black bg-opacity-60 rounded-lg border border-orange-500 focus:border-orange-400 focus:outline-none text-white">
+                <option value="">Select target...</option>
+              </select>
+            </div>
+            <div class="text-center">
+              <div class="text-sm text-gray-400">Filter (optional)</div>
+              <input type="text" id="route-filter" placeholder="keyword filter" class="w-full px-3 py-2 bg-black bg-opacity-60 rounded border border-gray-600 focus:border-orange-400 focus:outline-none text-white text-sm">
+            </div>
+            <div>
+              <button id="add-route-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-black font-bold py-3 px-4 rounded-lg transition pulse-orange">
+                + Add Route
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Routes -->
+        <div class="glass rounded-xl p-6">
+          <h3 class="text-lg font-semibold mb-4 text-orange-400">🚀 Active Routes</h3>
+          <div id="active-routes" class="space-y-3">
+            <!-- Routes will be populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Test Interface -->
+    <section class="mb-12">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-center">
+          <span class="text-orange-500">Test</span> Message Forwarding
+        </h2>
+        
+        <!-- Quick Test Form -->
+        <div class="glass rounded-xl p-8 mb-8 orange-glow">
+          <h3 class="text-xl font-semibold mb-6 text-orange-400">📤 Send Test Message</h3>
+          <form id="test-form" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-orange-300">From</label>
+                <input type="text" id="test-from" placeholder="sender@example.com or +1234567890" 
+                       class="w-full px-4 py-3 bg-black bg-opacity-60 rounded-lg border border-orange-500 focus:border-orange-400 focus:outline-none text-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2 text-orange-300">Target Service</label>
+                <select id="test-service" class="w-full px-4 py-3 bg-black bg-opacity-60 rounded-lg border border-orange-500 focus:border-orange-400 focus:outline-none text-white">
+                  <option value="">Select a service...</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2 text-orange-300">Message</label>
+              <textarea id="test-message" placeholder="Your test message here..." rows="4"
+                        class="w-full px-4 py-3 bg-black bg-opacity-60 rounded-lg border border-orange-500 focus:border-orange-400 focus:outline-none text-white"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-black font-bold py-4 rounded-lg transition pulse-orange text-lg">
+              🚀 Send Test Message
+            </button>
+          </form>
+          <div id="test-status" class="mt-6 text-center"></div>
+        </div>
+
+        <!-- Bulk Forward -->
+        <div class="glass rounded-xl p-8">
+          <h3 class="text-xl font-semibold mb-6 text-orange-400">📢 Broadcast to All Services</h3>
+          <form id="broadcast-form" class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium mb-2 text-orange-300">From</label>
+              <input type="text" id="broadcast-from" placeholder="broadcast@example.com" 
+                     class="w-full px-4 py-3 bg-black bg-opacity-60 rounded-lg border border-orange-500 focus:border-orange-400 focus:outline-none text-white">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2 text-orange-300">Message</label>
+              <textarea id="broadcast-message" placeholder="Message to broadcast to all available services..." rows="4"
+                        class="w-full px-4 py-3 bg-black bg-opacity-60 rounded-lg border border-orange-500 focus:border-orange-400 focus:outline-none text-white"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold py-4 rounded-lg transition text-lg">
+              📡 Broadcast to All Services
+            </button>
+          </form>
+          <div id="broadcast-status" class="mt-6 text-center"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Documentation -->
+    <section class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold mb-8 text-center">
+        <span class="text-orange-500">API</span> Reference
+      </h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-3 text-orange-400">POST /api/forward/:service</h3>
+          <p class="text-sm mb-4 text-gray-300">Forward to specific service</p>
+          <pre class="bg-black bg-opacity-80 p-4 rounded-lg text-xs overflow-x-auto text-orange-200">
+{
+  "message": "Hello World",
+  "from": "sender@example.com"
+}</pre>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-3 text-orange-400">POST /api/broadcast</h3>
+          <p class="text-sm mb-4 text-gray-300">Broadcast to all services</p>
+          <pre class="bg-black bg-opacity-80 p-4 rounded-lg text-xs overflow-x-auto text-orange-200">
+{
+  "message": "Emergency alert",
+  "from": "system@example.com"
+}</pre>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-3 text-orange-400">GET /api/services</h3>
+          <p class="text-sm mb-4 text-gray-300">List available services</p>
+          <pre class="bg-black bg-opacity-80 p-4 rounded-lg text-xs overflow-x-auto text-orange-200">
+[
+  {"name": "Email", "enabled": true},
+  {"name": "Discord", "enabled": false}
+]</pre>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-3 text-orange-400">POST /api/routes</h3>
+          <p class="text-sm mb-4 text-gray-300">Create message route</p>
+          <pre class="bg-black bg-opacity-80 p-4 rounded-lg text-xs overflow-x-auto text-orange-200">
+{
+  "source": "Email",
+  "target": "Discord",
+  "filter": "urgent"
+}</pre>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-3 text-orange-400">GET /api/routes</h3>
+          <p class="text-sm mb-4 text-gray-300">List active routes</p>
+          <pre class="bg-black bg-opacity-80 p-4 rounded-lg text-xs overflow-x-auto text-orange-200">
+[
+  {"id": "1", "source": "Email", 
+   "target": "Slack", "filter": null}
+]</pre>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-3 text-orange-400">Legacy Endpoints</h3>
+          <p class="text-sm mb-4 text-gray-300">Backward compatibility</p>
+          <pre class="bg-black bg-opacity-80 p-4 rounded-lg text-xs overflow-x-auto text-orange-200">
+POST /api/sms (Twilio webhook)
+POST /api/email (Email webhook)</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center mt-20 text-gray-500">
+      <div class="glass rounded-xl p-6 max-w-2xl mx-auto">
+        <p class="text-lg">
+          <span class="text-orange-500">Message Forge</span> | Open Source Universal Message Router
+        </p>
+        <div class="mt-4 space-x-6">
+          <a href="https://github.com/vats98754/message-forwarder" class="hover:text-orange-400 transition">📱 GitHub</a>
+          <a href="#" class="hover:text-orange-400 transition">📚 Documentation</a>
+          <a href="#" class="hover:text-orange-400 transition">💬 Support</a>
+        </div>
+        <p class="text-sm mt-4 text-gray-600">Built with ❤️ in TypeScript • Connect everything to everything</p>
+      </div>
+    </footer>
   </div>
 </body>
 </html>
