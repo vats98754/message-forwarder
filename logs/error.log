@@ -4,3 +4,121 @@
 2025-07-15T22:10:37.761Z [ERROR] SMS forwarding error: Error: 'From' +919818990367 is not a Twilio phone number or Short Code country mismatch
 2025-07-15T22:15:03.459Z [ERROR] SMS forwarding error: Error: The number +91981097XXXX is unverified. Trial accounts cannot send messages to unverified numbers; verify +91981097XXXX at twilio.com/user/account/phone-numbers/verified, or purchase a Twilio number to send messages to unverified numbers
 2025-07-15T22:16:14.399Z [ERROR] SMS forwarding error: Error: The number +91981097XXXX is unverified. Trial accounts cannot send messages to unverified numbers; verify +91981097XXXX at twilio.com/user/account/phone-numbers/verified, or purchase a Twilio number to send messages to unverified numbers
+2025-07-16T11:00:32.308Z [ERROR] Email forwarding error: Error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-74eb9e058fesm14067252b3a.40 - gsmtp
+2025-07-24T21:13:41.648Z [ERROR] Unhandled error: Error: secret option required for sessions
+    at session (/Users/anvay-coder/message-forwarder/node_modules/express-session/index.js:204:12)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at jsonParser (/Users/anvay-coder/message-forwarder/node_modules/body-parser/lib/types/json.js:113:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at expressInit (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/init.js:40:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at query (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/query.js:45:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+2025-07-24T21:13:42.774Z [ERROR] Unhandled error: Error: secret option required for sessions
+    at session (/Users/anvay-coder/message-forwarder/node_modules/express-session/index.js:204:12)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at jsonParser (/Users/anvay-coder/message-forwarder/node_modules/body-parser/lib/types/json.js:113:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at expressInit (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/init.js:40:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at query (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/query.js:45:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+2025-07-24T22:58:55.485Z [ERROR] Unhandled error: Error: Unknown authentication strategy "discord"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)
+2025-07-24T22:59:09.997Z [ERROR] Unhandled error: Error: Unknown authentication strategy "google"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)
+2025-07-24T23:05:58.877Z [ERROR] Unhandled error: Error: Unknown authentication strategy "discord"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at /Users/anvay-coder/message-forwarder/dist/index.js:55:47
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)
+2025-07-24T23:06:14.066Z [ERROR] Unhandled error: Error: Unknown authentication strategy "discord"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at /Users/anvay-coder/message-forwarder/dist/index.js:55:47
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)

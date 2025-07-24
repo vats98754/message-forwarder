@@ -27,3 +27,233 @@
 2025-07-15T22:16:14.399Z [ERROR] SMS forwarding error: Error: The number +91981097XXXX is unverified. Trial accounts cannot send messages to unverified numbers; verify +91981097XXXX at twilio.com/user/account/phone-numbers/verified, or purchase a Twilio number to send messages to unverified numbers
 2025-07-15T22:18:38.862Z [INFO] Message Forwarder running on port 3000
 2025-07-15T22:18:47.300Z [INFO] POST /api/sms
+2025-07-16T10:59:39.725Z [INFO] Message Forwarder running on port 3000
+2025-07-16T11:00:03.059Z [INFO] GET /
+2025-07-16T11:00:03.486Z [INFO] GET /app.js
+2025-07-16T11:00:30.186Z [INFO] POST /api/email
+2025-07-16T11:00:32.308Z [ERROR] Email forwarding error: Error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-74eb9e058fesm14067252b3a.40 - gsmtp
+2025-07-16T11:03:59.778Z [INFO] Message Forwarder running on port 3000
+2025-07-16T11:04:04.738Z [INFO] POST /api/email
+2025-07-16T12:45:39.001Z [INFO] Message Forwarder running on port 3000
+2025-07-16T12:46:45.985Z [INFO] POST /api/email
+2025-07-16T12:51:47.668Z [INFO] POST /api/email
+2025-07-16T14:00:20.937Z [INFO] Message Forwarder running on port 3000
+2025-07-24T21:13:32.909Z [INFO] Message Forwarder running on port 3000
+2025-07-24T21:13:41.648Z [ERROR] Unhandled error: Error: secret option required for sessions
+    at session (/Users/anvay-coder/message-forwarder/node_modules/express-session/index.js:204:12)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at jsonParser (/Users/anvay-coder/message-forwarder/node_modules/body-parser/lib/types/json.js:113:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at expressInit (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/init.js:40:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at query (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/query.js:45:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+2025-07-24T21:13:42.774Z [ERROR] Unhandled error: Error: secret option required for sessions
+    at session (/Users/anvay-coder/message-forwarder/node_modules/express-session/index.js:204:12)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at jsonParser (/Users/anvay-coder/message-forwarder/node_modules/body-parser/lib/types/json.js:113:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at expressInit (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/init.js:40:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at query (/Users/anvay-coder/message-forwarder/node_modules/express/lib/middleware/query.js:45:5)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:328:13)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:286:9
+2025-07-24T21:22:46.087Z [INFO] Message Forwarder running on port 3000
+2025-07-24T21:22:54.483Z [INFO] GET /
+2025-07-24T21:22:54.530Z [INFO] GET /app.js
+2025-07-24T21:22:55.294Z [INFO] GET /api/services
+2025-07-24T21:22:55.461Z [INFO] GET /api/user
+2025-07-24T21:22:55.791Z [INFO] GET /favicon.ico
+2025-07-24T21:33:58.655Z [INFO] Message Forwarder running on port 3000
+2025-07-24T21:34:07.910Z [INFO] GET /
+2025-07-24T21:34:07.982Z [INFO] GET /app.js
+2025-07-24T22:30:46.469Z [INFO] Message Forwarder running on port 3000
+2025-07-24T22:30:55.265Z [INFO] GET /
+2025-07-24T22:30:55.335Z [INFO] GET /app.js
+2025-07-24T22:30:57.368Z [INFO] GET /auth/google
+2025-07-24T22:30:57.451Z [INFO] GET /?auth=demo
+2025-07-24T22:30:57.480Z [INFO] GET /app.js
+2025-07-24T22:30:59.686Z [INFO] GET /auth/google
+2025-07-24T22:30:59.694Z [INFO] GET /?auth=demo
+2025-07-24T22:30:59.712Z [INFO] GET /app.js
+2025-07-24T22:31:02.210Z [INFO] GET /auth/google
+2025-07-24T22:31:02.215Z [INFO] GET /?auth=demo
+2025-07-24T22:31:02.241Z [INFO] GET /app.js
+2025-07-24T22:58:20.892Z [INFO] Message Forwarder running on port 3000
+2025-07-24T22:58:26.967Z [INFO] GET /
+2025-07-24T22:58:27.021Z [INFO] GET /app.js
+2025-07-24T22:58:27.790Z [INFO] GET /api/services
+2025-07-24T22:58:27.881Z [INFO] GET /api/user
+2025-07-24T22:58:28.174Z [INFO] GET /api/routes
+2025-07-24T22:58:28.268Z [INFO] GET /favicon.ico
+2025-07-24T22:58:30.768Z [INFO] GET /api/services/SMS/config
+2025-07-24T22:58:37.969Z [INFO] GET /
+2025-07-24T22:58:38.024Z [INFO] GET /app.js
+2025-07-24T22:58:38.350Z [INFO] GET /api/services
+2025-07-24T22:58:38.404Z [INFO] GET /api/user
+2025-07-24T22:58:38.423Z [INFO] GET /api/routes
+2025-07-24T22:58:39.213Z [INFO] GET /api/services/Textbelt/config
+2025-07-24T22:58:43.691Z [INFO] POST /api/services/Email/connect
+2025-07-24T22:58:49.676Z [INFO] GET /
+2025-07-24T22:58:49.709Z [INFO] GET /app.js
+2025-07-24T22:58:50.034Z [INFO] GET /api/services
+2025-07-24T22:58:50.064Z [INFO] GET /api/user
+2025-07-24T22:58:50.117Z [INFO] GET /api/routes
+2025-07-24T22:58:55.483Z [INFO] GET /auth/discord
+2025-07-24T22:58:55.485Z [ERROR] Unhandled error: Error: Unknown authentication strategy "discord"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)
+2025-07-24T22:58:58.566Z [INFO] GET /api/services/Telegram/config
+2025-07-24T22:59:04.003Z [INFO] GET /auth/slack
+2025-07-24T22:59:04.087Z [INFO] GET /?error=slack_not_configured
+2025-07-24T22:59:04.110Z [INFO] GET /app.js
+2025-07-24T22:59:04.391Z [INFO] GET /api/services
+2025-07-24T22:59:04.422Z [INFO] GET /api/user
+2025-07-24T22:59:04.494Z [INFO] GET /api/routes
+2025-07-24T22:59:09.996Z [INFO] GET /auth/google
+2025-07-24T22:59:09.997Z [ERROR] Unhandled error: Error: Unknown authentication strategy "google"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)
+2025-07-24T22:59:36.783Z [INFO] POST /api/services/Email/test
+2025-07-24T23:05:07.051Z [WARN] Google OAuth not configured - missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET
+2025-07-24T23:05:07.056Z [WARN] Discord OAuth not configured - missing DISCORD_CLIENT_ID or DISCORD_CLIENT_SECRET
+2025-07-24T23:05:07.057Z [WARN] Slack OAuth not configured - missing SLACK_CLIENT_ID or SLACK_CLIENT_SECRET
+2025-07-24T23:05:07.065Z [INFO] Message Forwarder running on port 3000
+2025-07-24T23:05:54.466Z [INFO] GET /
+2025-07-24T23:05:54.546Z [INFO] GET /app.js
+2025-07-24T23:05:55.355Z [INFO] GET /api/services
+2025-07-24T23:05:55.516Z [INFO] GET /api/user
+2025-07-24T23:05:55.756Z [INFO] GET /api/routes
+2025-07-24T23:05:58.874Z [INFO] GET /auth/discord
+2025-07-24T23:05:58.877Z [ERROR] Unhandled error: Error: Unknown authentication strategy "discord"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at /Users/anvay-coder/message-forwarder/dist/index.js:55:47
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)
+2025-07-24T23:06:01.282Z [INFO] GET /api/services/Telegram/config
+2025-07-24T23:06:03.600Z [INFO] GET /
+2025-07-24T23:06:03.623Z [INFO] GET /app.js
+2025-07-24T23:06:03.972Z [INFO] GET /api/services
+2025-07-24T23:06:03.997Z [INFO] GET /api/user
+2025-07-24T23:06:04.006Z [INFO] GET /api/routes
+2025-07-24T23:06:05.885Z [INFO] GET /auth/slack
+2025-07-24T23:06:11.294Z [INFO] GET /api/routes
+2025-07-24T23:06:14.064Z [INFO] GET /auth/discord
+2025-07-24T23:06:14.066Z [ERROR] Unhandled error: Error: Unknown authentication strategy "discord"
+    at attempt (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:193:39)
+    at authenticate (/Users/anvay-coder/message-forwarder/node_modules/passport/lib/middleware/authenticate.js:370:7)
+    at /Users/anvay-coder/message-forwarder/dist/index.js:55:47
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:284:15
+    at router.process_params (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/express/lib/router/index.js:280:10)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (node:events:507:28)
+    at SendStream.error (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:417:12)
+    at next (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:730:16)
+    at onstat (/Users/anvay-coder/message-forwarder/node_modules/send/index.js:719:14)
+    at FSReqCallback.oncomplete (node:fs:189:21)
+2025-07-24T23:19:20.740Z [INFO] Setting up Passport strategies...
+2025-07-24T23:19:20.742Z [WARN] ⚠️ Google OAuth not configured - setting up mock strategy
+2025-07-24T23:19:20.743Z [INFO] 🔧 Mock Google strategy registered
+2025-07-24T23:19:20.743Z [WARN] ⚠️ Discord OAuth not configured - setting up mock strategy
+2025-07-24T23:19:20.743Z [INFO] Discord Client ID present: false, length: undefined
+2025-07-24T23:19:20.743Z [INFO] 🔧 Mock Discord strategy registered
+2025-07-24T23:19:20.743Z [WARN] ⚠️ Slack OAuth not configured - missing valid SLACK_CLIENT_ID or SLACK_CLIENT_SECRET
+2025-07-24T23:19:20.743Z [INFO] AuthManager initialized
+2025-07-24T23:19:20.749Z [INFO] Message Forwarder running on port 3000
+2025-07-24T23:19:30.510Z [INFO] GET /
+2025-07-24T23:19:30.556Z [INFO] GET /app.js
+2025-07-24T23:19:31.330Z [INFO] GET /api/services
+2025-07-24T23:19:31.494Z [INFO] GET /api/user
+2025-07-24T23:19:31.725Z [INFO] GET /api/routes
+2025-07-24T23:19:34.706Z [INFO] GET /auth/discord
+2025-07-24T23:19:34.727Z [INFO] GET /?error=discord_not_configured
+2025-07-24T23:19:34.758Z [INFO] GET /app.js
+2025-07-24T23:19:35.032Z [INFO] GET /api/services
+2025-07-24T23:19:35.080Z [INFO] GET /api/user
+2025-07-24T23:19:35.099Z [INFO] GET /api/routes
+2025-07-24T23:19:37.536Z [INFO] GET /api/services/Telegram/config
+2025-07-24T23:19:45.017Z [INFO] GET /auth/slack
+2025-07-24T23:19:49.238Z [INFO] GET /api/services/SMS/config
+2025-07-24T23:19:54.134Z [INFO] GET /api/services/Textbelt/config
+2025-07-24T23:19:57.909Z [INFO] GET /auth/discord
+2025-07-24T23:19:57.931Z [INFO] GET /?error=discord_not_configured
+2025-07-24T23:19:57.969Z [INFO] GET /app.js
+2025-07-24T23:19:58.488Z [INFO] GET /api/services
+2025-07-24T23:19:58.600Z [INFO] GET /api/user
+2025-07-24T23:19:58.615Z [INFO] GET /api/routes
+2025-07-24T23:19:59.495Z [INFO] GET /api/services/Telegram/config
