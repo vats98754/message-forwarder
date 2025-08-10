@@ -9,7 +9,9 @@ A modern message forwarding app that connects different communication services t
 - **Route Management**: Create custom forwarding rules between services
 - **Real-time Forwarding**: Instant message delivery across platforms
 - **Clean UI**: Modern design with glass morphism effects
-- **Demo**: Try it at [GitHub Pages](https://vats98754.github.io/message-forwarder/)## Supported Services
+- **Demo**: Try it at [GitHub Pages](https://vats98754.github.io/message-forwarder/)
+
+## Supported Services
 
 | Service | Setup | Status |
 |---------|-------|--------|
